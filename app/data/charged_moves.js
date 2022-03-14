@@ -9,8 +9,7 @@
 // - stamina_loss_scaler,
 // - type.
 
-[
-[
+const CHARGED_MOVES = [
     {
         "critical_chance": 0.05,
         "duration": 2900,

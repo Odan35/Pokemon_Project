@@ -2,7 +2,7 @@
 // Returns a JSON dict where each key is the generation name and the value is a list of 
 // Pokemon that are from that generation. 
 // Each Pokemon entry has its name, Pokemon ID, and generation number.
-
+const GENERATION = [
 {
     "Generation 1": [
         {
@@ -4486,3 +4486,4 @@
 }
 ]
 }
+]

@@ -5,7 +5,7 @@
 // - type (an array of one or two items)
 // and optionally the form.
 
-[
+const POKEMON_TYPE = [
     {
         "form": "Fall_2019",
         "pokemon_id": 1,

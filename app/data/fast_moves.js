@@ -1,14 +1,6 @@
-// http://PoGoApi.net/api/v1/fast_moves.json
-// Returns a JSON array where each element is a dict containing :
-// - duration,
-// - energy_delta,
-// - move_ID,
-// - name,
-// - power,
-// - stamina_loss_scaler,
-// - type
 
-[
+
+const FAST_MOVES = [
     {
         "duration": 400,
         "energy_delta": 6,

@@ -1,5 +1,7 @@
 //Returns a JSON dict where each key is the attacking type and the value is a dict of defender types and the damage multiplier.
 // PoGoAPI.net/api/v1/type_effectiveness.json
+
+const TYPE_EFFECTIVENESS = [
 {
     "Bug": {
         "Bug": 1.0,
@@ -362,3 +364,4 @@
         "Water": 0.625
     }
 }
+]
