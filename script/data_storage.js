@@ -1,14 +1,3 @@
-// http://PoGoApi.net/api/v1/charged_moves.json
-// Returns a JSON array where each element is a dict containing :
-// - critical_chance (optional)
-// - duration,
-// - energy_delta,
-// - move ID,
-// - name
-// - power, 
-// - stamina_loss_scaler,
-// - type.
-
 const CHARGED_MOVES = [
     {
         "critical_chance": 0.05,

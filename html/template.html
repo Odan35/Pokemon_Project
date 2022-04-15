@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="numPage">Pokemon</title>
+    <script src="../script/data_storage.js"></script>
+    <script src="../script/pokemon.js"></script>
+    <script src="../script/tests.js"></script>   
+</head id="head">
+<body id="main">
+    <button id="prec">PRECEDENTS</button>
+    <button id="suiv">SUIVANTS</button>
+    <h1 id="page"></h1>
+    <label for="gen-select">Filtre:</label>
+    <select name="generation" id="gen-select">
+        <option value="">Choisir une Generation ou Afficher tous</option>
+        <option value="Generation :1">Generation : 1</option>
+        <option value="Generation :2">Generation : 2</option>
+        <option value="Generation :3">Generation : 3</option>
+        <option value="Generation :4">Generation : 4</option>
+        <option value="Generation :5">Generation : 5</option>
+        <option value="Generation :6">Generation : 6</option>
+        <option value="Generation :7">Generation : 7</option>
+        <option value="Generation :8">Generation : 8</option>
+    </select>
+    <label for="type">Type (4 to 8 characters):</label>
+    <input type="text" id="type" name="types" required minlength="4" maxlength="8" size="10">
+    <label for="tri-select">Tri:</label>
+    <select name="generation" id="tri-select">
+        <option value="">Choisir une façon de Trier</option>
+        <option value="nom">Tri par nom</option>
+        <option value="end">Tri pas endurance</option>
+    </select>
+    <button onclick="generationTabPokemon()">Generer la liste</button>
+    <script>
+        import_pokemon();
+        // variable de base essentiel pour le script
+        let affectID = 26;
+        let pageAffect = 0;
+        let page = 0;
+        let compteur = 1;
+        let gen = document.getElementById('gen-select').options[document.getElementById('gen-select').selectedIndex].value;
+
+        function pageSuivante(){
+            if (page == pageAffect) {
+                alert("Vous pouvez plus avancez vous êtes à la fin de la liste")
+            }
+            else {
+                var sauv = page;
+                page = page+1;
+                var listAfficher = document.getElementsByClassName(sauv);
+                var listNonAfficher = document.getElementsByClassName(page);
+                for (var pokemon of listAfficher) {
+                    pokemon.style.display = "none";
+                }
+                for (var pokemon of listNonAfficher) {
+                    pokemon.style.display = "";
+                }
+                document.getElementById("page").innerHTML = "Page actuelle :"+page;
+                
+            }
+        };
+
+        function pagePrecedente(){
+            if (page == 0){
+                alert ("Vous êtes sur la première page");
+            } else {
+                var sauv = page;
+                page = page-1;
+                var listAfficher = document.getElementsByClassName(sauv);
+                var listNonAfficher = document.getElementsByClassName(page);
+                for (var pokemon of listAfficher) {
+                    pokemon.style.display = "none";
+                }
+                for (var pokemon of listNonAfficher) {
+                    pokemon.style.display = "";
+                }
+                document.getElementById("page").innerHTML = "Page actuelle :"+page;
+            }
+        };
+
+
+        document.getElementById("page").innerHTML = "Page actuelle :"+page;
+        document.getElementById("prec").addEventListener("click",pagePrecedente,false);
+        document.getElementById("suiv").addEventListener("click",pageSuivante,false);
+
+        function generationTabPokemon(){
+            // initialisation du tableau pour afficher en html
+            let pokTable;
+            // Recuperation des choix données
+            let gen = document.getElementById('gen-select').options[document.getElementById('gen-select').selectedIndex].value;
+            let tri = document.getElementById('tri-select').options[document.getElementById('tri-select').selectedIndex].value;
+            let type = document.getElementById('type').value;
+            // filtrage par la generation
+            if (gen != "") {
+                pokTable = SortPokemonsByGeneration(gen,Pokemon.all_pokemons)
+            }
+            else{
+                pokTable = Pokemon.all_pokemons;
+            }
+            // Filtrage par type
+            if (type != "") {
+                for (const key in Type.all_types) {
+                    if (Object.hasOwnProperty.call(Type.all_types, key)) {
+                        if (Type.all_types[key].name.toLowerCase() == type.toLowerCase()) {
+                        pokTable = getPokemonsByType(Type.all_types[key].name,pokTable);
+                        }
+                        
+                    }
+                }    
+            }
+
+            //Affectation des types de tri
+            if (tri == "nom") {
+                pokTable = sortPokemonByName(pokTable);
+            }
+            else if(tri == "end"){
+                pokTable = sortPokemonByStamina(pokTable);
+            }
+
+            // intialisation de la variable body
+            let main = document.getElementById("main");
+            let bodyActuelle = document.getElementById("tab");
+            if (bodyActuelle != undefined) {
+                bodyActuelle.remove(bodyActuelle); 
+            }
+            let body = document.createElement("table");
+            body.id = "tab";
+            main.appendChild(body);
+            // initialisation du compteur a 1
+            compteur = 1;
+            //initialisation du pageAffect a 0
+            pageAffect = 0;
+            //initialisation du AffectId a 26
+            affectID = 26;
+            // initialisation du head
+            let thead = document.createElement("thead");
+            let thId = document.createElement("th");
+            let thNom = document.createElement("th");
+            let thType = document.createElement("th");
+            let thGen = document.createElement("th");
+            let thEnd = document.createElement("th");
+            let thPatta = document.createElement("th");
+            let thPdef = document.createElement("th");
+            let thImg = document.createElement("th");
+            thId.innerHTML = "id";
+            thNom.innerHTML = "nom";
+            thType.innerHTML = "types";
+            thGen.innerHTML = "génération";
+            thEnd.innerHTML = "endurance";
+            thPatta.innerHTML = "attack";
+            thPdef.innerHTML = "defence";
+            thImg.innerHTML = "image"
+            body.appendChild(thead);
+            thead.appendChild(thId);
+            thead.appendChild(thNom);
+            thead.appendChild(thGen);
+            thead.appendChild(thType);
+            thead.appendChild(thEnd);
+            thead.appendChild(thPatta);
+            thead.appendChild(thPdef);
+            thead.appendChild(thImg);
+
+        for (const pokemon of pokTable) {
+                // creation des variables pour les éléments pokemons
+                let tr = document.createElement("tr");
+                let id = document.createElement("td");
+                let nom = document.createElement("td");
+                let gen = document.createElement("td");
+                let type = document.createElement("td");
+                let end = document.createElement("td");
+                let att = document.createElement("td");
+                let def = document.createElement("td");
+                let image_td = document.createElement("td");
+                let image = document.createElement("img");
+                let image_id = "";
+                //init de l'identifiant pour le lien de l'image
+                if (pokemon.pokemon_id < 10) {
+                        image_id = "00"+pokemon.pokemon_id;
+                }
+                else if(pokemon.pokemon_id < 100){
+                        image_id = "0"+pokemon.pokemon_id;
+                }
+                else{
+                    image_id = pokemon.pokemon_id;
+                }
+                //affectation des valeurs
+                    id.innerHTML = pokemon.pokemon_id;
+                    nom.innerHTML = pokemon.pokemon_name;
+                    gen.innerHTML = pokemon.pokemon_gen;
+                    for (let index = 0; index < pokemon.types.length; index++) {
+
+                        if (index == pokemon.types.length-1) {
+                            type.innerHTML = type.innerHTML + pokemon.types[index].name;
+                            
+                        } else {
+                            type.innerHTML = type.innerHTML + pokemon.types[index].name + ",";
+                        }  
+                    }
+                    end.innerHTML = pokemon.base_stamina
+                    att.innerHTML = pokemon.base_attack
+                    def.innerHTML = pokemon.base_defense
+                    
+                    image.src ="https://www.adl-web.fr/pokemon-base/images/"+image_id+".png";
+                        
+
+                    //creation d'un élement pokemon
+                    body.appendChild(tr);
+                    image_td.appendChild(image);
+                    tr.appendChild(id);
+                    tr.appendChild(nom);
+                    tr.appendChild(gen);
+                    tr.appendChild(type);
+                    tr.appendChild(end);
+                    tr.appendChild(att);
+                    tr.appendChild(def);
+                    tr.appendChild(image_td);
+
+                    //Affectation des classes par élement pokemon (pour les pages)
+                    if (compteur == affectID) {
+                        affectID = affectID + 25;
+                        pageAffect++;
+                    }
+                    if(compteur <= affectID){
+                        tr.className = pageAffect;
+                    }
+                    if (tr.className != page) {
+                        tr.style.display = "none";
+                        
+                    }
+                    compteur++;
+                }
+                page = 0;
+                document.getElementById("page").innerHTML = "Page actuelle :"+page;
+    
+            }
+    </script>
+</body>
+</html>
